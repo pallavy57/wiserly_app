@@ -1,0 +1,20 @@
+Flask
+Flask-Migrate
+ShopifyAPI
+python-dotenv
+Flask-SQLAlchemy
+Flask-Migrate
+gunicorn
+psycopg2-binary
+Flask-Cors
+simplejson
+Flask-HTTPAuth
+# requests
+# stripe
+requests
+APScheduler
+jsonlines
+# pandas
+# ariadne
+# uvicorn
+# graphql-core
