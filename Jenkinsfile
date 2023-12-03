@@ -1,20 +1,22 @@
 def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
-pipeline {
-    agent {
-        kubernetes {
-            label 'wiserly-inventory-planner'
-            namespace 'wiserly-inventory-planner'
-            containerTemplate {
-                name 'wiserly-inventory-planner'
-                image 'docker'
-                ttyEnabled true
-                command 'cat'
-            }
-        }
-    }
 
-     stages {
-    stage('Get latest version of code') {
+podTemplate(yaml: '''
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: wiserly-inventory-planner-pod
+      namespace: wiserly-inventory-planner
+    spec:
+      containers:
+      - name: docker
+        image: docker
+        command:
+        - sleep
+        args:
+        - 99d
+''') {
+  node("wiserly-inventory-planner") {
+        stage('Get latest version of code') {
         agent any
          steps {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'pallavy57', url: 'https://github.com/pallavy57/wiserly_app.git']]])
@@ -45,13 +47,10 @@ pipeline {
         } 
       }
     }
+
+
   }
 }
 
 
 
-
-
-
-  
-  
