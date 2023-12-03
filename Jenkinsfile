@@ -17,27 +17,21 @@ podTemplate(yaml: '''
 ''') {
   node("master") {
         stage('Get latest version of code') {
-         steps {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'pallavy57', url: 'https://github.com/pallavy57/wiserly_app.git']]])
             sh "ls -lart ./*"
-        }
     }    
     stage('Docker Build') {
-      steps {
       	withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker login --username="${USERNAME}" --password="${PASSWORD}"'
                 sh "docker build -t ${REPOSITORY_URI}:${BUILD_NUMBER} ."
                 sh 'docker image ls' 
-        } 
-      }
+        }
     }
     stage('Docker Push') {
-      steps {
         withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
         sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER} ."
         sh 'docker image ls' 
         } 
-      }
     }
 
 
