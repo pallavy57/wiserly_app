@@ -1,0 +1,3 @@
+apiVersion: v2
+name: wiserly-inventory-planner
+version: 1.0.0

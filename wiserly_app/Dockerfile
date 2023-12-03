@@ -4,7 +4,6 @@
 
 # pull official base image
 FROM python:3.11.3-slim-buster as builder
-
 # set work directory
 WORKDIR /usr/src/app
 
@@ -70,6 +69,10 @@ RUN chown -R app:app $APP_HOME
 
 # change to the app user
 USER app
-
+EXPOSE 5000
 # run entrypoint.prod.sh
-ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+
+ENV FLASK_ENV="prod" 
+ENTRYPOINT ["gunicorn"]
+CMD ["manage:app"]
+# ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source .env
+
 if [ "$DATABASE" = "wiserlydb_02" ]
 then
     echo "Waiting for postgres..."
