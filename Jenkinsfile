@@ -3,17 +3,17 @@ pipeline {
     agent {
         kubernetes {
             label 'wiserly-inventory-planner'
-            podTemplate {
-                volumes {
-                    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
-                }
-                containerTemplate {
-                    name 'wiserly-inventory-planner'
-                    image 'docker'
-                    ttyEnabled true
-                    command 'cat'
-                }
+            // podTemplate {
+            //     volumes {
+            //         hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+            //     }
+            containerTemplate {
+                name 'wiserly-inventory-planner'
+                image 'docker'
+                ttyEnabled true
+                command 'cat'
             }
+            // }
         }
     }
 
