@@ -1,5 +1,5 @@
 // wiserly-inventory-planner
-podTemplate(namespace: 'wiserly-inventory-planner' , serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
+podTemplate(namespace: 'wiserly-inventory-planner' , serviceAccount: 'jenkins-admin', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
