@@ -1,10 +1,12 @@
 // def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
 
 pipeline{
-   agent any
+    agent {
+    label 'docker' 
+  }
    environment{
       registry = "pallavy57/wiserly-inventory-planner"
-      registryCredential = 'docker-hub'
+      registryCredential = 'gcr:linen-waters-366217'
       dockerImage = ''
    }
    stages{
@@ -15,16 +17,24 @@ pipeline{
         }
     } 
     stage('Docker Build') {
+              agent {
+        docker {
+          label 'docker'
+          image 'node:7-alpine'
+          args '--name docker-node' // list any args
+        }
+      }
         steps{
           script {
               dockerImage = docker.build registry + ":$BUILD_NUMBER"
           }
         }
     } 
+    // https://us-central1-docker.pkg.dev/linen-waters-366217/wiserly-inventory-planner
     stage('Docker Push') {
         steps{
           script {
-            docker.withRegistry( '', registryCredential ) {
+            docker.withRegistry( 'https://us-central1-docker.pkg.dev/linen-waters-366217/wiserly-inventory-planner', registryCredential ) {
             dockerImage.push()
             }
           }
