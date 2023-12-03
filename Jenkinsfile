@@ -1,18 +1,28 @@
 def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"     
 pipeline {
 agent {
-    label 'master'
-}    
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: docker
+            image: docker:latest
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+             - mountPath: /var/run/docker.sock
+               name: docker-sock
+          volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock    
+        '''
+    }
+  }   
 stages {
-    // stage('Docker Install') {
-    //     agent {
-    //         docker { image 'node:20.10.0-alpine3.18' }
-    //     }
-    //     steps {
-    //         sh 'node --version'
-    //         sh 'docker ps'
-    //     }
-    // }
     stage('Get latest version of code') {
         agent any
          steps {
