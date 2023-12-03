@@ -1,3 +1,4 @@
+def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
 pipeline {
     agent {
         kubernetes {
@@ -15,7 +16,7 @@ pipeline {
             }
         }
     }
-    def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
+
      stages {
     stage('Get latest version of code') {
         agent any
