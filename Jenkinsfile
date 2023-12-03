@@ -39,9 +39,10 @@ dockerImage = ''
       // }
     }
     stage('Cleaning up') {
-steps{
-sh "docker rmi $registry:$BUILD_NUMBER"
-}
+        steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+        }
+    }
 }
   }
 }
