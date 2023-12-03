@@ -23,7 +23,7 @@ stages {
     stage('Docker Build') {
     	agent {
         docker {
-            image 'mudit097/sample_nodejs:latest'
+            image 'docker'
             reuseNode true
               }
           }
