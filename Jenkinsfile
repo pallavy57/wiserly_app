@@ -1,5 +1,5 @@
 // wiserly-inventory-planner
-podTemplate(label: 'my-pod',namespace: 'wiserly-inventory-planner' , serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
+podTemplate(namespace: 'wiserly-inventory-planner' , serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -36,7 +36,7 @@ podTemplate(label: 'my-pod',namespace: 'wiserly-inventory-planner' , serviceAcco
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   ]
   ) {
-    node('my-pod') {
+    node(POD_LABEL) {
 
         def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
 
