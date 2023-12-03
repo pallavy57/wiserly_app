@@ -35,6 +35,7 @@ docker.withRegistry( '', registryCredential ) {
 dockerImage.push()
 }
 }
+}
       // steps {
       //   withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       //   sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER} ."
