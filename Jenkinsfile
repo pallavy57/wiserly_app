@@ -1,61 +1,21 @@
-podTemplate(label: 'wiserly-inventory-planner', serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
-    containerTemplate(
-      name: 'docker', 
-      image: 'docker', 
-      command: 'cat', 
-      resourceRequestCpu: '100m',
-      resourceLimitCpu: '300m',
-      resourceRequestMemory: '300Mi',
-      resourceLimitMemory: '500Mi',
-      ttyEnabled: true
-    ),
-    containerTemplate(
-      name: 'kubectl', 
-      image: 'allanlei/kubectl',
-      resourceRequestCpu: '100m',
-      resourceLimitCpu: '300m',
-      resourceRequestMemory: '300Mi',
-      resourceLimitMemory: '500Mi', 
-      ttyEnabled: true, 
-      command: 'cat'
-    ),
-    containerTemplate(
-      name: 'helm', 
-      image: 'alpine/helm:3.13.2', 
-      resourceRequestCpu: '100m',
-      resourceLimitCpu: '300m',
-      resourceRequestMemory: '300Mi',
-      resourceLimitMemory: '500Mi',
-      ttyEnabled: true, 
-      command: 'cat'
-    )
-  ],
-
-  volumes: [
-    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
-  ]
-  ) {
-    node('wiserly-inventory-planner') {
-
-        def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
-        stage('Get latest version of code') {
-          checkout scm
+pipeline {
+    agent {
+        kubernetes {
+            label 'wiserly-inventory-planner'
+            podTemplate {
+                volumes {
+                    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+                }
+                containerTemplate {
+                    name 'wiserly-inventory-planner'
+                    image 'docker'
+                    ttyEnabled true
+                    command 'cat'
+                }
+            }
         }
-        stage('Check running containers') {
-            container('docker') {  
-                sh 'hostname'
-                sh 'hostname -i' 
-                sh 'docker ps'
-                sh 'ls'
-            }
-            container('kubectl') { 
-                sh 'kubectl get pods -n default'  
-            }
-            container('helm') { 
-                sh 'helm repo add stable https://charts.helm.sh/stable'
-                sh 'helm repo update'     
-            }
-        }  
+    }
+    def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
      stages {
     stage('Get latest version of code') {
         agent any
@@ -89,12 +49,7 @@ podTemplate(label: 'wiserly-inventory-planner', serviceAccount: 'wiserly-invento
       }
     }
   }
-       
-    }
 }
-
-
-
 
 
 
