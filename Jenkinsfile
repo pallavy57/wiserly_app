@@ -15,8 +15,10 @@ dockerImage = ''
         }
     }    
     stage('Docker Build') {
+      steps{
       script {
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
+      }
       }
       // steps {
       // 	withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -27,9 +29,11 @@ dockerImage = ''
       // }
     }
     stage('Docker Push') {
+      steps{
     	script {
           docker.withRegistry( '', registryCredential ) {
           dockerImage.push()
+      }
       }
       // steps {
       //   withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
