@@ -1,28 +1,42 @@
-def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"     
-pipeline {
-agent {
-    kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        spec:
-          containers:
-          - name: docker
-            image: docker:latest
-            command:
-            - cat
-            tty: true
-            volumeMounts:
-             - mountPath: /var/run/docker.sock
-               name: docker-sock
-          volumes:
-          - name: docker-sock
-            hostPath:
-              path: /var/run/docker.sock    
-        '''
-    }
-  }   
-stages {
+podTemplate(label: 'mypod', serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
+    containerTemplate(
+      name: 'docker', 
+      image: 'docker', 
+      command: 'cat', 
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi',
+      ttyEnabled: true
+    ),
+    containerTemplate(
+      name: 'kubectl', 
+      image: 'allanlei/kubectl',
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi', 
+      ttyEnabled: true, 
+      command: 'cat'
+    ),
+    containerTemplate(
+      name: 'helm', 
+      image: 'alpine/helm:3.13.2', 
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi',
+      ttyEnabled: true, 
+      command: 'cat'
+    )
+  ],
+
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+  ]
+    node('mypod') {
+      def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"  
+      stages {
     stage('Get latest version of code') {
         agent any
          steps {
@@ -55,7 +69,14 @@ stages {
       }
     }
   }
-}  
-  
+    }
+)
+
+
+
+
+
+
+
   
   
