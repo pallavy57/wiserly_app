@@ -1,5 +1,5 @@
 // wiserly-inventory-planner
-podTemplate(label: 'my-pod',serviceAccount: 'wiserly-inventory-planner', containers: [ 
+podTemplate(label: 'my-pod',namespace: 'wiserly-inventory-planner' , serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
