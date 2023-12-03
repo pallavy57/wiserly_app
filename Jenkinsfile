@@ -4,7 +4,7 @@ pipeline {
             label 'wiserly-inventory-planner'
             podTemplate {
                 volumes {
-                    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+                    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
                 }
                 containerTemplate {
                     name 'wiserly-inventory-planner'
