@@ -14,7 +14,7 @@ podTemplate(yaml: '''
         - sleep
         args:
         - 99d
-''') {
+''', namespace:"wiserly-inventory-planner", serviceAccount : "wiserly-inventory-planner-web") {
   node("master") {
         stage('Get latest version of code') {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'pallavy57', url: 'https://github.com/pallavy57/wiserly_app.git']]])
