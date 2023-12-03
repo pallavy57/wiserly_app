@@ -1,4 +1,4 @@
-podTemplate(label: 'mypod', serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
+podTemplate(label: 'wiserly-inventory-planner', serviceAccount: 'wiserly-inventory-planner-web', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -34,9 +34,29 @@ podTemplate(label: 'mypod', serviceAccount: 'wiserly-inventory-planner-web', con
   volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   ]
-    node('mypod') {
-      def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"  
-      stages {
+  ) {
+    node('wiserly-inventory-planner') {
+
+        def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
+        stage('Get latest version of code') {
+          checkout scm
+        }
+        stage('Check running containers') {
+            container('docker') {  
+                sh 'hostname'
+                sh 'hostname -i' 
+                sh 'docker ps'
+                sh 'ls'
+            }
+            container('kubectl') { 
+                sh 'kubectl get pods -n default'  
+            }
+            container('helm') { 
+                sh 'helm repo add stable https://charts.helm.sh/stable'
+                sh 'helm repo update'     
+            }
+        }  
+     stages {
     stage('Get latest version of code') {
         agent any
          steps {
@@ -69,8 +89,11 @@ podTemplate(label: 'mypod', serviceAccount: 'wiserly-inventory-planner-web', con
       }
     }
   }
+       
     }
-)
+}
+
+
 
 
 
