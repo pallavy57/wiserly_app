@@ -31,10 +31,6 @@ podTemplate(namespace: 'wiserly-inventory-planner' , serviceAccount: 'jenkins-ad
       command: 'cat'
     )
   ],
-
-  volumes: [
-    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
-  ]
   ) {
     node(POD_LABEL) {
 
