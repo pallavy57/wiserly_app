@@ -19,7 +19,7 @@ dockerImage = ''
       script {
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
       }
-      }
+}
       // steps {
       // 	withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       //           sh 'docker login --username="${USERNAME}" --password="${PASSWORD}"'
@@ -29,12 +29,12 @@ dockerImage = ''
       // }
     }
     stage('Docker Push') {
-      steps{
-    	script {
-          docker.withRegistry( '', registryCredential ) {
-          dockerImage.push()
-      }
-      }
+steps{
+script {
+docker.withRegistry( '', registryCredential ) {
+dockerImage.push()
+}
+}
       // steps {
       //   withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       //   sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER} ."
