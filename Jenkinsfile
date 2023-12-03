@@ -4,7 +4,7 @@ podTemplate(yaml: '''
     apiVersion: v1
     kind: Pod
     metadata:
-      name: master
+      name: wiserly-inventory-planner-pod
       namespace: wiserly-inventory-planner
     spec:
       containers:
@@ -15,7 +15,7 @@ podTemplate(yaml: '''
         args:
         - 99d
 ''') {
-  node("wiserly-inventory-planner") {
+  node("master") {
         stage('Get latest version of code') {
         agent any
          steps {
