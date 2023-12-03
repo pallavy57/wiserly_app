@@ -1,5 +1,5 @@
-
-podTemplate(label: 'master', namespace:"wiserly-inventory-planner", serviceAccount : "wiserly-inventory-planner-web", containers: [ 
+// wiserly-inventory-planner
+podTemplate(label: 'master',namespace='wiserly-inventory-planner' serviceAccount: 'wiserly-inventory-planner', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -40,7 +40,6 @@ podTemplate(label: 'master', namespace:"wiserly-inventory-planner", serviceAccou
 
         def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
 
-
         stage('Get latest version of code') {
           checkout scm
         }
@@ -59,24 +58,50 @@ podTemplate(label: 'master', namespace:"wiserly-inventory-planner", serviceAccou
                 sh 'helm repo update'     
             }
         }  
-        stage('Docker Build') {
-         container('docker'){  
-      	withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+
+        stage('Build Image'){
+            container('docker'){
+              withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker login --username="${USERNAME}" --password="${PASSWORD}"'
                 sh "docker build -t ${REPOSITORY_URI}:${BUILD_NUMBER} ."
                 sh 'docker image ls' 
-        }
-         }
-    }
-      stage('Docker Push') {
-         container('docker'){
-        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER} ."
-        sh 'docker image ls' 
+              }                 
+            }
         } 
-         }
-    }
+        stage('Push Image'){
+            container('docker'){
+              withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                sh 'docker image ls'
+                sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER}"
+              }                 
+            }
+        }
 
-  
+        // stage('Deploy postgres helm chart to k8s'){
+        //     container('helm'){
+        //         sh 'helm list'
+        //         sh "helm lint ./${HELM_CHART_DIRECTORY_1}"
+        //         sh "helm upgrade --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME_1} ./${HELM_CHART_DIRECTORY_1}"
+        //         sh "helm list | grep ${HELM_APP_NAME_1}"
+        //     }
+        // }   
+
+        // stage('Deploy app helm chart to k8s'){
+        //     container('helm'){
+        //         sh 'helm list'
+        //         sh "helm lint ./${HELM_CHART_DIRECTORY_2}"
+        //         sh "helm upgrade --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME_2} ./${HELM_CHART_DIRECTORY_2}"
+        //         sh "helm list | grep ${HELM_APP_NAME_2}"
+        //     }
+        // }   
+
+        // stage('Deploy Image to k8s'){
+        //     container('helm'){
+        //         sh 'helm list'
+        //         sh "helm lint ./${HELM_CHART_DIRECTORY_3}"
+        //         sh "helm upgrade --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME_3} ./${HELM_CHART_DIRECTORY_3}"
+        //         sh "helm list | grep ${HELM_APP_NAME_3}"
+        //     }
+        // }      
     }
 }
