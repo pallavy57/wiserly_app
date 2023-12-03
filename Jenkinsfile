@@ -1,8 +1,8 @@
 def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
 pipeline {
-   agent any
+   agent {dockerfile true}
 
-     stages {
+  stages {
     stage('Get latest version of code') {
         agent any
          steps {
