@@ -60,17 +60,21 @@ podTemplate(label: 'master', namespace:"wiserly-inventory-planner", serviceAccou
             }
         }  
         stage('Docker Build') {
+         container('docker'){  
       	withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker login --username="${USERNAME}" --password="${PASSWORD}"'
                 sh "docker build -t ${REPOSITORY_URI}:${BUILD_NUMBER} ."
                 sh 'docker image ls' 
         }
+         }
     }
       stage('Docker Push') {
+         container('docker'){
         withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
         sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER} ."
         sh 'docker image ls' 
         } 
+         }
     }
 
   
