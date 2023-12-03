@@ -4,7 +4,7 @@ podTemplate(yaml: '''
     apiVersion: v1
     kind: Pod
     metadata:
-      name: wiserly-inventory-planner-pod
+      name: master
       namespace: wiserly-inventory-planner
     spec:
       containers:
