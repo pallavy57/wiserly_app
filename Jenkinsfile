@@ -1,15 +1,6 @@
 def REPOSITORY_URI = "pallavy57/wiserly-inventory-planner"
 pipeline {
-    // agent {
-    //     kubernetes {
-    //         containerTemplate {
-    //             name 'docker'
-    //             image 'docker'
-    //             ttyEnabled true
-    //             command 'cat'
-    //         }
-    //     }
-    // }
+   agent any
 
      stages {
     stage('Get latest version of code') {
