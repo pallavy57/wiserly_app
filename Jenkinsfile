@@ -65,7 +65,7 @@ pipeline {
         kind: Pod
         metadata:
           labels:
-            app: inventory_planner_resources
+            app: inventory-planner-resources
             namespace: wiserly-inventory-planner
         spec:
           containers:
