@@ -68,12 +68,12 @@ pipeline {
             name: inventory.planner
         spec:
           containers:
-          - name: docker.app
+          - name: docker-app
             image: gcr.io/cloud-builders/docker
             command:
             - cat
             tty: true
-          - name: kubectl.app
+          - name: kubectl-app
             image: gcr.io/cloud-builders/kubectl
             command:
             - cat
