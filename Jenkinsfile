@@ -63,14 +63,17 @@ pipeline {
       yaml '''
         apiVersion: v1
         kind: Pod
+        metadata:
+          labels:
+            name: inventory.planner
         spec:
           containers:
-          - name: docker
+          - name: docker.app
             image: gcr.io/cloud-builders/docker
             command:
             - cat
             tty: true
-          - name: kubectl
+          - name: kubectl.app
             image: gcr.io/cloud-builders/kubectl
             command:
             - cat
