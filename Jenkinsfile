@@ -65,15 +65,15 @@ pipeline {
         kind: Pod
         metadata:
           labels:
-            name: inventory-planner
+            name: inventoryplanner
         spec:
           containers:
-          - name: docker-app
+          - name: dockerapp
             image: gcr.io/cloud-builders/docker
             command:
             - cat
             tty: true
-          - name: kubectl-app
+          - name: kubectlapp
             image: gcr.io/cloud-builders/kubectl
             command:
             - cat
