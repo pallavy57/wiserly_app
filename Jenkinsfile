@@ -65,7 +65,7 @@ pipeline {
         kind: Pod
         metadata:
           labels:
-            app: test
+            app: inventory_planner_resources
         spec:
           containers:
           - name: docker
@@ -73,18 +73,11 @@ pipeline {
             command:
             - cat
             tty: true
-            volumeMounts:
-            - mountPath: /var/run/docker.sock
-              name: docker-sock
           - name: kubectl
             image: gcr.io/cloud-builders/kubectl
             command:
             - cat
             tty: true
-          volumes:
-          - name: docker-sock
-            hostPath:
-              path: /var/run/docker.sock
       '''
     }
   }
