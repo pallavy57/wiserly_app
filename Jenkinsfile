@@ -66,6 +66,7 @@ pipeline {
         metadata:
           labels:
             app: inventory_planner_resources
+            namespace: wiserly-inventory-planner
         spec:
           containers:
           - name: docker
