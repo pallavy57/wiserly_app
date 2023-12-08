@@ -63,10 +63,6 @@ pipeline {
       yaml '''
         apiVersion: v1
         kind: Pod
-        metadata:
-          labels:
-            name: inventory-planner-resources
-            namespace: wiserly-inventory-planner
         spec:
           containers:
           - name: docker
