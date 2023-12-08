@@ -65,7 +65,7 @@ pipeline {
         kind: Pod
         metadata:
           labels:
-            name: inventory.planner
+            name: inventory-planner
         spec:
           containers:
           - name: docker-app
