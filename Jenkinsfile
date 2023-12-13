@@ -51,11 +51,7 @@
 // }
 pipeline {
   environment {
-    PROJECT = "linen-waters-366217"
-    APP_NAME = "wiserly-inventory-planner"
-    REPO_NAME = "wiserly-inventory-planner"
-    REPO_LOCATION = "us-central1 (Iowa)"
-    IMAGE_NAME = "${REPO_LOCATION}-docker.pkg.dev/${PROJECT}/${REPO_NAME}/${APP_NAME}"
+    IMAGE_NAME = "wip-repo"
   }
 
   agent {
@@ -90,20 +86,20 @@ pipeline {
       }
     }
 
-    stage('Build docker image') {
+  stage('Build docker image') {
     when { expression { true } }
       steps{
         container('docker'){
           dir('Backend Wiserly') {
             echo 'Build docker image Start'
             sh 'pwd'
-            sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
-            withCredentials([file(credentialsId: "${PROJECT}_artifacts", variable: 'GCR_CRED')]){
-              sh 'cat "${GCR_CRED}" | docker login -u _json_key_base64 --password-stdin https://"${REPO_LOCATION}"-docker.pkg.dev'
-              sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
-              sh 'docker logout https://"${REPO_LOCATION}"-docker.pkg.dev'
+            sh 'docker build -t ${IMAGE_NAME} .'
+            withAWS(credentials: 'aws-jenkins', region: 'eu-north-1') {
+                    sh 'aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin  public.ecr.aws/y5g9s1s7'
+                    sh 'docker tag ${IMAGE_NAME}:latest public.ecr.aws/y5g9s1s7/wip-repo/${IMAGE_NAME}:latest'
+                    sh 'docker push  public.ecr.aws/y5g9s1s7/${IMAGE_NAME}:latest'
             }
-            sh 'docker rmi ${IMAGE_NAME}:${IMAGE_TAG}'
+            sh 'docker rmi ${IMAGE_NAME}:latest'
             echo 'Build docker image Finish'
           }
         }
