@@ -1,19 +1,44 @@
-podTemplate(label: 'builder',
-            containers: [
-                    containerTemplate(name: 'jnlp', image: 'larribas/jenkins-jnlp-slave-with-ssh:1.0.0', args: '${computer.jnlpmac} ${computer.name}'),
-                    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
-                    containerTemplate(name: 'kubectl', image: 'ceroic/kubectl', command: 'cat', ttyEnabled: true),
-                    
-            ],
-            volumes: [
-                    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-                    secretVolume(secretName: 'kubeconfig', mountPath: '/root/kubeconfig'),
-                    
-            ]) {
+podTemplate(label: 'mypod', containers: [ 
+    containerTemplate(
+      name: 'docker', 
+      image: 'docker', 
+      command: 'cat', 
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi',
+      ttyEnabled: true
+    ),
+    containerTemplate(
+      name: 'kubectl', 
+      image: 'allanlei/kubectl',
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi', 
+      ttyEnabled: true, 
+      command: 'cat'
+    ),
+    containerTemplate(
+      name: 'helm', 
+      image: 'alpine/helm:3.13.2', 
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi',
+      ttyEnabled: true, 
+      command: 'cat'
+    )
+  ],
 
-        node('builder') {
-
-           //Define all variables
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+  ]
+  ) 
+  
+  {
+   node('mypod') {
+  //Define all variables
   def project = 'wip-01'
   def appName = 'wiserly-inventory-planner'
   def registeryName = 'wip9090.azurecr.io'
@@ -70,9 +95,51 @@ podTemplate(label: 'builder',
                    break
   }
 
+} 
+   }}
+
+podTemplate(label: 'builder',
+            containers: [
+                    containerTemplate(name: 'jnlp', image: 'larribas/jenkins-jnlp-slave-with-ssh:1.0.0', args: '${computer.jnlpmac} ${computer.name}'),
+                    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+                    containerTemplate(name: 'kubectl', image: 'ceroic/kubectl', command: 'cat', ttyEnabled: true),
+                    
+            ],
+            volumes: [
+                    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+                    secretVolume(secretName: 'kubeconfig', mountPath: '/root/kubeconfig'),
+                    
+            ]) {
+
+        node('builder') {
+
+            stage('Checkout') {
+                checkout scm
+            }
+
+            stage('Build') {
+                container('maven') {
+                    sh 'mvn clean install'
+                }
+            }
+
+            stage('Build docker image') {
+                gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                DOCKER_IMAGE_REPO = "<YOUR-AWS-ECR-ID>.dkr.ecr.eu-west-1.amazonaws.com/<SERVICE-REPO-NAME>"
+                container('docker') {
+                    withDockerRegistry([credentialsId: 'ecr:eu-west-1:AWS ECR', url: "https://${DOCKER_IMAGE_REPO}"]) {
+                        sh "docker build . -t ${serviceName}:${gitCommit}"
+                        sh "docker tag ${serviceName}:${gitCommit} ${DOCKER_IMAGE_REPO}:${gitCommit}"
+                        sh "docker tag ${serviceName}:${gitCommit} ${DOCKER_IMAGE_REPO}:latest"
+                        sh "docker push ${DOCKER_IMAGE_REPO}:${gitCommit}"
+                        sh "docker push ${DOCKER_IMAGE_REPO}:latest"
+                        slackSend color: '#4CAF50', message: "New version of ${serviceName}:${gitCommit} pushed to ECR!"
+                    }
+
+                }
+            }
         }
     }   
-            }
 
 
 
