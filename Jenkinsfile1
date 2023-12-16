@@ -1,4 +1,4 @@
-podTemplate(label: 'mypod', containers: [ 
+podTemplate( containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -35,7 +35,7 @@ podTemplate(label: 'mypod', containers: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   ]
   ) {
-       node('mypod') {
+       node(POD_LABEL) {
   //Define all variables
   def project = 'wip-01'
   def appName = 'wiserly-inventory-planner'
