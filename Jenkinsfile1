@@ -1,15 +1,12 @@
 node {
-
   //Define all variables
   def project = 'wip-01'
   def appName = 'wiserly-inventory-planner'
   def registeryName = 'wip9090.azurecr.io'
   def imageVersion = 'development'
   def feSvcName = 'wip-as-a-service'
-
   //Checkout Code from Git
   checkout scm
-  
   //Stage 1 : Build the docker image.
   stage('Build image') {
       sh("docker build -t ${registeryName}/${appName} .")
@@ -59,4 +56,4 @@ node {
                    break
   }
 
-}
+}}
