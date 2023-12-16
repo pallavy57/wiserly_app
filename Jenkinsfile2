@@ -1,9 +1,8 @@
 
 
 pipeline {
-    agent {
-        kubernetes {
-            yaml '''
+         kubernetes {
+      yaml '''
         apiVersion: v1
         kind: Pod
         spec:
@@ -24,9 +23,9 @@ pipeline {
             tty: true
             securityContext:
               privileged: true
-       '''
-        }
-    }
+      '''
+    }        
+   
     stages {
 
         // checkout and test
