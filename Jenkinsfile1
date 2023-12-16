@@ -36,7 +36,7 @@ podTemplate(label: 'mypod', containers: [
   ]
   ) 
   
-  {
+
    node('mypod') {
   //Define all variables
   def project = 'wip-01'
@@ -44,8 +44,12 @@ podTemplate(label: 'mypod', containers: [
   def registeryName = 'wip9090.azurecr.io'
   def imageVersion = 'development'
   def feSvcName = 'wip-as-a-service'
+
+
   //Checkout Code from Git
-  checkout scm
+  stage('Get latest version of code') {
+          checkout scm
+  }
   //Stage 1 : Build the docker image.
   stage('Build image') {
       sh("docker build -t ${registeryName}/${appName} .")
@@ -94,7 +98,7 @@ podTemplate(label: 'mypod', containers: [
                    sh("echo http://`kubectl --namespace=${namespace} get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
                    break
   }
-
+  }
 } 
-   }}
+  
 
