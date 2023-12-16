@@ -1,32 +1,24 @@
 
 
 pipeline {
-    agent{
-         kubernetes {
+    agent {
+    kubernetes {
       yaml '''
         apiVersion: v1
         kind: Pod
+        metadata:
+          labels:
+            name: inventoryplanner
         spec:
-          volumes:
-            - name: build-cache
-              persistentVolumeClaim: 
-                claimName: build-cache
-          serviceAccountName: jenkins-agents
           containers:
-         - name: docker
-            image: jenkinsinit:latest
-            volumeMounts:
-            - name: build-cache
-              mountPath: /var/lib/docker
-              subPath: docker
+          - name: docker
+            image: myreg/docker:1
             command:
             - cat
             tty: true
-            securityContext:
-              privileged: true
       '''
-    }        
-   }
+    }
+  }
     stages {
 
         // checkout and test
