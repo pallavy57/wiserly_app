@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wip-as-a-service
+  namespace: development
+spec:
+  ports:
+    - name: http
+      port: 5000
+  type: LoadBalancer    
+  selector:
+    apps: wip-service

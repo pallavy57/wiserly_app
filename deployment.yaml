@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wip-service-deployment
+  namespace: development
+  labels:
+    app: wip-service-app
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        apps: wip-service
+    spec:
+      containers:
+      - name: wip-service
+        image: wip9090.azurecr.io/wiserly-inventory-planner:development
+        ports:
+        - containerPort: 5000
