@@ -34,10 +34,8 @@ podTemplate(label: 'mypod', containers: [
   volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   ]
-  ) 
-  
-
-   node('mypod') {
+  ) {
+       node('mypod') {
   //Define all variables
   def project = 'wip-01'
   def appName = 'wiserly-inventory-planner'
@@ -99,6 +97,10 @@ podTemplate(label: 'mypod', containers: [
                    break
   }
   }
+  }
+  
+
+
 } 
   
 
