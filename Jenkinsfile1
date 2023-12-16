@@ -1,33 +1,49 @@
+podTemplate(label: 'mypod', containers: [ 
+    containerTemplate(
+      name: 'docker', 
+      image: 'docker', 
+      command: 'cat', 
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi',
+      ttyEnabled: true
+    ),
+    containerTemplate(
+      name: 'kubectl', 
+      image: 'allanlei/kubectl',
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi', 
+      ttyEnabled: true, 
+      command: 'cat'
+    ),
+    containerTemplate(
+      name: 'helm', 
+      image: 'alpine/helm:3.13.2', 
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '500Mi',
+      ttyEnabled: true, 
+      command: 'cat'
+    )
+  ],
 
-
-
-
-node {
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+  ]
+  ) 
+  
+  {
+   node('mypod') {
   //Define all variables
   def project = 'wip-01'
   def appName = 'wiserly-inventory-planner'
   def registeryName = 'wip9090.azurecr.io'
   def imageVersion = 'development'
   def feSvcName = 'wip-as-a-service'
-
-   agent {
-    kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            name: inventoryplanner
-        spec:
-          containers:
-          - name: dockerapp
-            image: docker
-            command:
-            - cat
-            tty: true
-      '''
-    }
-  }
   //Checkout Code from Git
   checkout scm
   //Stage 1 : Build the docker image.
@@ -79,4 +95,10 @@ node {
                    break
   }
 
-}}
+} 
+   }}
+
+
+
+
+
