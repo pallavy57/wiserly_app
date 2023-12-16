@@ -1,44 +1,19 @@
-podTemplate(label: 'mypod', serviceAccount:"my-jenkins", containers: [ 
-    containerTemplate(
-      name: 'docker', 
-      image: 'docker', 
-      command: 'cat', 
-      resourceRequestCpu: '100m',
-      resourceLimitCpu: '300m',
-      resourceRequestMemory: '300Mi',
-      resourceLimitMemory: '500Mi',
-      ttyEnabled: true
-    ),
-    containerTemplate(
-      name: 'kubectl', 
-      image: 'allanlei/kubectl',
-      resourceRequestCpu: '100m',
-      resourceLimitCpu: '300m',
-      resourceRequestMemory: '300Mi',
-      resourceLimitMemory: '500Mi', 
-      ttyEnabled: true, 
-      command: 'cat'
-    ),
-    containerTemplate(
-      name: 'helm', 
-      image: 'alpine/helm:3.13.2', 
-      resourceRequestCpu: '100m',
-      resourceLimitCpu: '300m',
-      resourceRequestMemory: '300Mi',
-      resourceLimitMemory: '500Mi',
-      ttyEnabled: true, 
-      command: 'cat'
-    )
-  ],
+podTemplate(label: 'builder',
+            containers: [
+                    containerTemplate(name: 'jnlp', image: 'larribas/jenkins-jnlp-slave-with-ssh:1.0.0', args: '${computer.jnlpmac} ${computer.name}'),
+                    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+                    containerTemplate(name: 'kubectl', image: 'ceroic/kubectl', command: 'cat', ttyEnabled: true),
+                    
+            ],
+            volumes: [
+                    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+                    secretVolume(secretName: 'kubeconfig', mountPath: '/root/kubeconfig'),
+                    
+            ]) {
 
-  volumes: [
-    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
-  ]
-  ) 
-  
-  {
-   node('mypod') {
-  //Define all variables
+        node('builder') {
+
+           //Define all variables
   def project = 'wip-01'
   def appName = 'wiserly-inventory-planner'
   def registeryName = 'wip9090.azurecr.io'
@@ -95,8 +70,9 @@ podTemplate(label: 'mypod', serviceAccount:"my-jenkins", containers: [
                    break
   }
 
-} 
-   }}
+        }
+    }   
+            }
 
 
 
