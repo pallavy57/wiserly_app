@@ -32,7 +32,9 @@ pipeline {
 
          //Checkout Code from Git
   stage('Get latest version of code') {
-          checkout scm
+        steps{
+        checkout scm
+      }
   }
 
         stage('Build UI Docker Image') {
@@ -48,11 +50,15 @@ pipeline {
 
       //Stage 2 : Push the image to docker registry
   stage('Push image to registry') {
+       steps {
+                container('docker') {
       sh "docker push ${registeryName}/${appName}"
+                }}
   }
   
   //Stage 3 : Deploy Application
   stage('Deploy Application') {
+    steps{
        switch (namespace) {
               //Roll out to Dev Environment
               case "development":
@@ -89,5 +95,6 @@ pipeline {
                    break
   }    
     }
+  }
     }
 }
