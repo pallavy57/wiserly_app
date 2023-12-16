@@ -1,6 +1,7 @@
 
 
 pipeline {
+    agent{
          kubernetes {
       yaml '''
         apiVersion: v1
@@ -25,7 +26,7 @@ pipeline {
               privileged: true
       '''
     }        
-   
+   }
     stages {
 
         // checkout and test
