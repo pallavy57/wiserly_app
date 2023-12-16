@@ -1,3 +1,7 @@
+
+
+
+
 node {
   //Define all variables
   def project = 'wip-01'
@@ -5,6 +9,25 @@ node {
   def registeryName = 'wip9090.azurecr.io'
   def imageVersion = 'development'
   def feSvcName = 'wip-as-a-service'
+
+   agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            name: inventoryplanner
+        spec:
+          containers:
+          - name: dockerapp
+            image: docker
+            command:
+            - cat
+            tty: true
+      '''
+    }
+  }
   //Checkout Code from Git
   checkout scm
   //Stage 1 : Build the docker image.
