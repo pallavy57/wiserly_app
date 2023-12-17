@@ -10,7 +10,7 @@ pipeline {
    feSvcName = 'wip-as-a-service'
   }
 
-    agent:any
+    agent any
     stages {
 
          //Checkout Code from Git
