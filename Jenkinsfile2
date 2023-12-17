@@ -10,29 +10,7 @@ pipeline {
    feSvcName = 'wip-as-a-service'
   }
 
-    agent {
-    kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            name: inventoryplanner
-        spec:
-          containers:
-          - name: docker
-            image: docker
-            command:
-            - cat
-            tty: true
-          - name: kubectlapp
-            image: allanlei/kubectl
-            command:
-            - cat
-            tty: true  
-      '''
-    }
-  }
+    agent:any
     stages {
 
          //Checkout Code from Git
