@@ -14,11 +14,7 @@ pipeline {
     stages {
 
          //Checkout Code from Git
-  stage('Get latest version of code') {
-        steps{
-        checkout scm
-      }
-  }
+ checkout scm
 
         stage('Build UI Docker Image') {
             steps {
