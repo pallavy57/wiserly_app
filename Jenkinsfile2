@@ -1,8 +1,7 @@
 
 
 pipeline {
-     environment {
-   
+  environment {
    project = 'wip-01'
    appName = 'wiserly-inventory-planner'
    registeryName = 'wip9090.azurecr.io'
@@ -10,7 +9,7 @@ pipeline {
    feSvcName = 'wip-as-a-service'
   }
 
-    agent {
+  agent {
     kubernetes {
       yaml '''
         apiVersion: v1
@@ -33,10 +32,8 @@ pipeline {
       '''
     }
   }
-    stages {
-
-         //Checkout Code from Git
-  stage('Get latest version of code') {
+  stages {
+ stage('Get latest version of code') {
         steps{
         checkout scm
       }
@@ -76,10 +73,11 @@ pipeline {
            //Grab the external Ip address of the service
                    sh("echo http://`kubectl --namespace=${namespace} get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
                   
-           
-        
-  }    
-    }
+       }   
+    } 
   }
-    }
+     
+}
+
+  
 }
