@@ -13,8 +13,7 @@ pipeline {
     agent any
     stages {
 
-         //Checkout Code from Git
- checkout scm
+
 
         stage('Build UI Docker Image') {
             steps {
