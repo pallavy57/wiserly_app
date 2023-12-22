@@ -8,30 +8,33 @@ pipeline {
    imageVersion = 'development'
    feSvcName = 'wip-as-a-service'
   }
-
   agent {
     kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            name: inventoryplanner
-        spec:
-          containers:
-          - name: docker
-            image: docker
-            command:
-            - cat
-            tty: true
-          - name: kubectlapp
-            image: allanlei/kubectl
-            command:
-            - cat
-            tty: true  
-      '''
-    }
-  }
+      label 'inventory-planner'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+  component: ci
+spec:
+  containers:
+  - name: docker
+    image: docker:latest
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/docker.sock
+      name: docker-sock
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+"""
+}
+   }
   stages {
  stage('Get latest version of code') {
         steps{
@@ -42,7 +45,7 @@ pipeline {
         stage('Build UI Docker Image') {
             steps {
                 container('docker') {
-                     
+                      sh docker run -v /var/run/docker.sock:/var/run/docker.sock
                       sleep(time: 10, unit: "SECONDS")
                       sh("docker build -t ${registeryName}/${appName} .")
                       sh 'docker image ls' 
@@ -81,3 +84,5 @@ pipeline {
 
   
 }
+
+// https://docs.microfocus.com/doc/Real_User_Monitor/9.52/EnableRemoteAPI
