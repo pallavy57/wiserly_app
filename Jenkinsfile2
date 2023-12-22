@@ -19,11 +19,6 @@ pipeline {
             name: inventoryplanner
         spec:
           containers:
-          - name: docker
-            image: docker
-            command:
-            - cat
-            tty: true
           - name: kubectlapp
             image: allanlei/kubectl
             command:
@@ -41,21 +36,22 @@ pipeline {
 
         stage('Build UI Docker Image') {
             steps {
-                container('docker') {
-                      sh 'dockerd & > /dev/null'
+                // container('docker') {
+                     
                       sleep(time: 10, unit: "SECONDS")
                       sh("docker build -t ${registeryName}/${appName} .")
                       sh 'docker image ls' 
-                }
+                // }
             }
         }
 
       //Stage 2 : Push the image to docker registry
   stage('Push image to registry') {
        steps {
-                container('docker') {
+                // container('docker') {
       sh "docker push ${registeryName}/${appName}"
-                }}
+                }
+                // }
   }
   
   //Stage 3 : Deploy Application
