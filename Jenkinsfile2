@@ -45,7 +45,7 @@ spec:
         stage('Build UI Docker Image') {
             steps {
                 container('docker') {
-                      sh docker run -v /var/run/docker.sock:/var/run/docker.sock
+                    
                       sleep(time: 10, unit: "SECONDS")
                       sh("docker build -t ${registeryName}/${appName} .")
                       sh 'docker image ls' 
