@@ -12,7 +12,10 @@ shopify_bp = Blueprint('shopify_bp', __name__,
                        url_prefix='/shopify',
                        static_folder='templates/static',
                        template_folder='templates')
-
+@shopify_bp.route('/testing')
+# @shopify_auth_required
+def testing():
+    return "Hello from Python!"
 
 @shopify_bp.route('/')
 # @shopify_auth_required

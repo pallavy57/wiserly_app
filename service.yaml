@@ -7,8 +7,9 @@ metadata:
     service.beta.kubernetes.io/azure-dns-label-name: wiserlyonline
 spec:
   ports:
-    - name: https
-      port: 80
+  - protocol: "TCP"
+    port: 5000
+    targetPort: 5000
   type: LoadBalancer    
   selector:
     apps: wip-service-deployment
