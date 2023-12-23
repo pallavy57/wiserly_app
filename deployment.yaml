@@ -4,19 +4,19 @@ metadata:
   name: wip-service-deployment
   namespace: development
   labels:
-    app: wip-service-deployment
+    app: wip-service
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: wip-service-deployment
+      app: wip-service
   template:
     metadata:
       labels:
-        app: wip-service-deployment
+        app: wip-service
     spec:
       containers:
-        - name: wip-service-deployment
+        - name: wip-service
           image: wipregistry.azurecr.io/wiserly-inventory-planner:latest  
           ports:
             - containerPort: 8000

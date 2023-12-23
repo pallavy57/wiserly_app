@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wip-service-deployment
+  name: wip-service-01
   namespace: development
   annotations:
     service.beta.kubernetes.io/azure-dns-label-name: wiserlyonline
@@ -12,4 +12,4 @@ spec:
     targetPort: 8000
   type: LoadBalancer    
   selector:
-    apps: wip-service-deployment
+    apps: wip-service
