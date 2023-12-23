@@ -5,6 +5,8 @@ pipeline {
     registeryName = 'wipregistry.azurecr.io'
     imageVersion = 'development'
     feSvcName = 'wip-as-a-service'
+    AZURE_SUBSCRIPTION_ID='35c42bfc-f8d8-48e8-ad03-4f9eb1379f05'
+    RESOURCE_GROUP='jenkins-vm'
   }
     agent any
     stages {
@@ -22,7 +24,13 @@ pipeline {
         stage('Run') {
           
             steps {
-                sh "docker push ${registeryName}/${appName}"
+                withCredentials([usernamePassword(credentialsId: 'ACR')]) {
+                            sh 'az login'
+                            sh 'az account set -s $AZURE_SUBSCRIPTION_ID'
+                            sh 'az acr login --name $CONTAINER_REGISTRY --resource-group $RESOURCE_GROUP'
+                            sh "docker push ${registeryName}/${appName}"
+                }
+                
             }
         }
     }
