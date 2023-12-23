@@ -39,7 +39,7 @@ pipeline {
                withKubeConfig([credentialsId: 'K83']) {
                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
                    sh 'chmod u+x ./kubectl'
-                   sh './kubectl get pods -n dev'
+                   sh './kubectl get pods'
                }
            }
         }
@@ -50,7 +50,7 @@ pipeline {
      
               //Roll out to Dev Environment
                    // Create namespace if it doesn't exist
-                   sh("./kubectl get ns ${namespace} || kubectl create ns ${namespace}")
+                   sh("./kubectl get ns ${namespace} || ./kubectl create ns ${namespace}")
            //Update the imagetag to the latest version
                    sh("sed -i.bak 's#`${registeryName}/${appName}`:${imageVersion}#${BUILD_NUMBER}#' ./k8s/development/*.yaml")
                    //Create or update resources
