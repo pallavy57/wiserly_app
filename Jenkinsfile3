@@ -52,8 +52,7 @@ pipeline {
               sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
                    // Create namespace if it doesn't exist
                    sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
-        //    //Update the imagetag to the latest version
-        //            sh("sed -i.bak 's#`${registeryName}/${appName}`#' *.yaml")
+                  
                    //Create or update resources
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")

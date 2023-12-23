@@ -19,5 +19,5 @@ spec:
         - name: wip-service-deployment
           image: wipregistry.azurecr.io/wiserly-inventory-planner:latest  
           ports:
-            - containerPort: 5000
+            - containerPort: 8000
 
