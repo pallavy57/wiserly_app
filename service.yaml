@@ -3,13 +3,9 @@ kind: Service
 metadata:
   name: wip-service-01
   namespace: development
-  # annotations:
-  #   service.beta.kubernetes.io/azure-dns-label-name: wiserlyplanner
 spec:
   ports:
-  - name: http
-    protocol: "TCP"
-    port: 80
+  - port: 80
     targetPort: 8000
   type: LoadBalancer    
   selector:
