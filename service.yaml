@@ -7,7 +7,8 @@ metadata:
   #   service.beta.kubernetes.io/azure-dns-label-name: wiserlyplanner
 spec:
   ports:
-  - protocol: "TCP"
+  - name: http
+    protocol: "TCP"
     port: 8000
     targetPort: 8000
   type: LoadBalancer    

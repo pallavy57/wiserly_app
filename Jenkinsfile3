@@ -57,6 +57,7 @@ pipeline {
                    //Create or update resources
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
+                   sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
            //Grab the external Ip address of the service
                    sh("./kubectl get services --namespace=${namespace}")
                   
