@@ -77,6 +77,7 @@ pipeline {
                    sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
            //Grab the external Ip address of the service
                    sh("./kubectl get services --namespace=${namespace}")
+                   sh './kubectl get pods -n development'
                   
          
     } 
