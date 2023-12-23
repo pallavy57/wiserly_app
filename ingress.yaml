@@ -3,7 +3,9 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
 spec:
   ingressClassName: nginx
   rules:
@@ -16,5 +18,5 @@ spec:
           service:
             name: wip-service-01
             port:
-              number: 8000
+              number: 80
               
