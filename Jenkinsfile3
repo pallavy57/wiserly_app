@@ -23,7 +23,7 @@ pipeline {
                 sh 'docker image ls'
             }
         }
-        stage('Run') {
+        stage('Push the Image') {
           
             steps {
                 withCredentials([usernamePassword(credentialsId: 'ACR',passwordVariable: 'password', usernameVariable: 'username')]) {
@@ -33,6 +33,22 @@ pipeline {
                 
             }
         }
+
+        stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi ${registeryName}/${appName}:latest"
+      }
+    }
+
+     stage("install helm"){
+    steps{
+         sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
+         sh 'ls -a'
+         sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
+         sh 'sudo cp linux-amd64/helm /usr/bin'
+         sh 'helm version'
+    }
+}
 
         stage('List Pods') {
            steps {
@@ -46,25 +62,16 @@ pipeline {
 
       
          stage('Deploy Application') {
-             agent {
-           kubernetes {
-                 containerTemplate {
-                   name 'helm'
-                   image 'lachlanevenson/k8s-helm:v3.1.1'
-                   ttyEnabled true
-                   command 'cat'
-              }
-            }
-         }
+          
     steps{
     
               sh("az login --service-principal -u b60930fc-d48e-4034-b9f6-f30843e5bb60 -p  ~uC8Q~Fn.sBL4o963tArpBvr3IpIOGukffM71b~z --tenant 412abcf4-3edc-4720-b50e-22484b38856b")
               sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
                    // Create namespace if it doesn't exist
                    sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
-                                  container('helm') { 
+                                 
                  sh ("./get_helm.sh upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace development")
-               } 
+              
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
