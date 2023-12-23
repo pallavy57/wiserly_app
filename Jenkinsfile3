@@ -50,7 +50,7 @@ pipeline {
      
               //Roll out to Dev Environment
                    // Create namespace if it doesn't exist
-                   sh("./kubectl get ns ${namespace} || ./kubectl create ns ${namespace}")
+                   sh("./kubectl get namespace ${namespace} || ./kubectl create namespace ${namespace}")
            //Update the imagetag to the latest version
                    sh("sed -i.bak 's#`${registeryName}/${appName}`#' *.yaml")
                    //Create or update resources
