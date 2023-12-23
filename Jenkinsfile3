@@ -1,0 +1,29 @@
+pipeline {
+   environment {
+    project = 'wip-01'
+    appName = 'wiserly-inventory-planner'
+    registeryName = 'wip9090.azurecr.io'
+    imageVersion = 'development'
+    feSvcName = 'wip-as-a-service'
+  }
+    agent any
+    stages {
+        stage('Get latest version of code') {
+        steps{
+        checkout scm
+        }
+       }
+        stage('Build') {
+            steps {
+                sh("docker build -t ${registeryName}/${appName} .")
+                sh 'docker image ls'
+            }
+        }
+        stage('Run') {
+          
+            steps {
+                sh "docker push ${registeryName}/${appName}"
+            }
+        }
+    }
+}

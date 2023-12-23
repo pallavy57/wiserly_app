@@ -10,8 +10,8 @@ pipeline {
   }
   agent {
     kubernetes {
-      label 'inventory-planner'
-      defaultContainer 'jnlp'
+      // label 'inventory-planner'
+      // defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
 kind: Pod
@@ -86,3 +86,5 @@ spec:
 }
 
 // https://docs.microfocus.com/doc/Real_User_Monitor/9.52/EnableRemoteAPI
+
+// https://pushbuildtestdeploy.com/jenkins-on-kubernetes-building-docker-images/
