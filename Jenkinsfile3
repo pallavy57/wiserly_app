@@ -48,7 +48,8 @@ pipeline {
          stage('Deploy Application') {
     steps{
      
-              //Roll out to Dev Environment
+              sh("az login --service-principal -u b60930fc-d48e-4034-b9f6-f30843e5bb60 -p  ~uC8Q~Fn.sBL4o963tArpBvr3IpIOGukffM71b~z --tenant 412abcf4-3edc-4720-b50e-22484b38856b")
+              sh("az aks get-credentials --resource-groups jenkins-vm --name  wip-cluster")
                    // Create namespace if it doesn't exist
                    sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
            //Update the imagetag to the latest version
