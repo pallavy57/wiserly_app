@@ -58,7 +58,7 @@ pipeline {
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
            //Grab the external Ip address of the service
-                   sh("echo http://`kubectl --namespace=${namespace} get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
+                   sh("./kubectl get services --namespace=${namespace}")
                   
          
     } 
