@@ -3,7 +3,8 @@ kind: Service
 metadata:
   name: wip-service-deployment
   namespace: development
-  service.beta.kubernetes.io/azure-dns-label-name: wiserlyonline
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: wiserlyonline
 spec:
   ports:
     - name: https
