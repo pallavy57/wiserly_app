@@ -4,7 +4,7 @@ metadata:
   name: wip-service-01
   namespace: development
   annotations:
-    service.beta.kubernetes.io/azure-dns-label-name: wiserlyonline
+    service.beta.kubernetes.io/azure-dns-label-name: wiserlyplanner
 spec:
   ports:
   - protocol: "TCP"
