@@ -40,11 +40,10 @@ pipeline {
                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
                    sh 'chmod u+x ./kubectl'
                    sh './kubectl get pods -n development'
-                   sh("curl https://baltocdn.com/helm/signing.asc | apt-key add -")
-                   sh("apt-get install apt-transport-https --yes")
-                   sh('echo "deb https://baltocdn.com/helm/stable/debian/ all main" |  tee /etc/apt/sources.list.d/helm-stable-debian.list')
-                   sh('apt-get update')
-                   sh('apt-get install helm')
+                   sh("curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh")
+                   sh("chmod 700 get_helm.sh")
+                   sh('./get_helm.sh')
+                   
 
                }
            }
@@ -58,7 +57,7 @@ pipeline {
               sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
                    // Create namespace if it doesn't exist
                    sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
-                   sh ("helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace development")
+                   sh ("./get_helm.sh upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace development")
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
