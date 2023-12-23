@@ -16,4 +16,4 @@ spec:
             name: wip-service-01
             port:
               number: 8000
-              name: http
+              
