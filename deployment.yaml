@@ -7,6 +7,9 @@ metadata:
     app: wip-service-app
 spec:
   replicas: 4
+  selector:
+    matchLabels:
+      app: wip-service-app
   template:
     metadata:
       labels:
