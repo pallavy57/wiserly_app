@@ -28,7 +28,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'ACR',passwordVariable: 'password', usernameVariable: 'username')]) {
                             sh 'docker login -u ${username} -p ${password} wipregistry.azurecr.io'
-                            sh "docker image push ${registeryName}/${appName}:${BUILD_NUMBER}"
+                            sh "docker image push ${registeryName}/${appName}"
                 }
                 
             }
