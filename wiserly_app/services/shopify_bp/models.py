@@ -1,6 +1,6 @@
 from sqlalchemy import Column, types
 
-from services.extensions import db
+from wiserly_app.services.extensions import db
 
 
 class WiserlyShops(db.Model):

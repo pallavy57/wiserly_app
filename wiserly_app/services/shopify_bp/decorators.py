@@ -2,7 +2,7 @@ from functools import wraps
 import shopify
 from flask import session, redirect, url_for, request, current_app
 from .models import WiserlyShops
-from services.extensions import db
+from wiserly_app.services.extensions import db
 
 def shopify_auth_required(f):
     @wraps(f)

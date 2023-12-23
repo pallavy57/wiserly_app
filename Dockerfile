@@ -72,7 +72,22 @@ USER app
 EXPOSE 5000
 # run entrypoint.prod.sh
 
-ENV FLASK_ENV="prod" 
+ENV SHOPIFY_API_KEY="c5490bfc44800dc22a6c7e67385c93ef"
+ENV SHOPIFY_SHARED_SECRET="3b4c279c656b60557df965d0851cd368"
+ENV HOSTNAME_FOR_SHOPIFY=http://20.198.189.60/
+ENV SHOPIFY_API_VERSION=2023-01
+ENV SHOPIFY_BILLING_TEST_MODE="true"
+ENV WEBHOOK_TEST_MODE="false"
+ENV DATABASE_URL=postgresql+psycopg2://wiserly_02:prodpassword@postgresql-155691-0.cloudclusters.net:18598/wiserlydb_02
+ENV ENVFLASK_DEBUG=0
+ENV POSTGRES_DB="wiserlydb_02"
+ENV POSTGRES_USER="wiserly_02"
+ENV POSTGRES_PASSWORD="prodpassword"
+ENV APP_FOLDER="/home/app/web"
+ENV SQL_HOST="postgresql-155691-0.cloudclusters.net"
+ENV SQL_PORT=18598
+ENV DATABASE="wiserlydb_02"
+ENV FLASK_ENV="prod"
 ENTRYPOINT ["gunicorn"]
-CMD ["./wiserly_app/manage:app"]
+CMD ["manage:app"]
 # ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]

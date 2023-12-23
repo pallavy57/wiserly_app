@@ -3,11 +3,11 @@ from flask import (
     Blueprint, render_template, current_app, request, redirect, session,
     url_for)
 
-from services import const
+from wiserly_app.services import const
 
 from .models import WiserlyShops
 from .decorators import shopify_auth_required
-from services.extensions import db
+from wiserly_app.services.extensions import db
 shopify_bp = Blueprint('shopify_bp', __name__,
                        url_prefix='/shopify',
                        static_folder='templates/static',

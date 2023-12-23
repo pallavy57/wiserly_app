@@ -5,10 +5,10 @@ from flask import jsonify
 from flask_cors import CORS
 import logging
 from flask_migrate import Migrate
-from services.shopify_bp import shopify_bp
-from services.config import DefaultConfig, TestingConfig
+from wiserly_app.services.shopify_bp import shopify_bp
+from wiserly_app.services.config import DefaultConfig, TestingConfig
 from flask import request, jsonify
-from services.extensions import db
+from wiserly_app.services.extensions import db
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s:%(lineno)d %(threadName)s : %(message)s")
