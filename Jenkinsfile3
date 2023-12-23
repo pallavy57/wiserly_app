@@ -52,7 +52,7 @@ pipeline {
               sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
                    // Create namespace if it doesn't exist
                    sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
-                  sh("./kubectl delete deployment wip-service-deployment -n development")
+                  //sh("./kubectl delete deployment wip-service-deployment -n development")
                   //sh("./kubectl delete service wip-service-01 -n development")
                    //Create or update resources
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
