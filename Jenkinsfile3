@@ -8,6 +8,7 @@ pipeline {
     AZURE_SUBSCRIPTION_ID='35c42bfc-f8d8-48e8-ad03-4f9eb1379f05'
     AZURE_TENANT_ID='412abcf4-3edc-4720-b50e-22484b38856b'
     RESOURCE_GROUP='jenkins-vm'
+    namespace="wiserly-inventory-planner"
   }
     agent any
     stages {
