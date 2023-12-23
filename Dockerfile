@@ -22,7 +22,7 @@ COPY . /usr/src/app/
 # RUN flake8  --ignore=E501,F401 ./wiserly_app/services
 
 # install python dependencies
-COPY ./requirements.txt .
+COPY ./wiserly_app/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 
@@ -55,14 +55,14 @@ RUN pip install --no-cache /wheels/*
 
 
 # copy entrypoint-prod.sh
-COPY ./entrypoint.prod.sh $APP_HOME
+COPY ./wiserly_app/entrypoint.prod.sh $APP_HOME
 
 # copy project
 COPY . $APP_HOME
 
 #copy templates
-COPY  --from=builder /usr/src/app/services/shopify_bp/templates/*.html $APP_HOME/templates/static/
-COPY --from=builder /usr/src/app/services/shopify_bp/templates/static/ $APP_HOME/templates/static/
+COPY  --from=builder /usr/src/app/wiserly_app/services/shopify_bp/templates/*.html $APP_HOME/templates/static/
+COPY --from=builder /usr/src/app/wiserly_app/services/shopify_bp/templates/static/ $APP_HOME/templates/static/
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME
@@ -74,5 +74,5 @@ EXPOSE 5000
 
 ENV FLASK_ENV="prod" 
 ENTRYPOINT ["gunicorn"]
-CMD ["manage:app"]
+CMD ["./wiserly_app/manage:app"]
 # ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
