@@ -9,4 +9,4 @@ spec:
       port: 5000
   type: LoadBalancer    
   selector:
-    apps: wip-service
+    apps: wip-service-app

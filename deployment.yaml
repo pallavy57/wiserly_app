@@ -13,10 +13,10 @@ spec:
   template:
     metadata:
       labels:
-        apps: wip-service
+        apps: wip-service-app
     spec:
       containers:
-      - name: wip-service
+      - name: wip-service-app
         image: wipregistry.azurecr.io/wiserly-inventory-planner:latest
         ports:
         - containerPort: 5000
