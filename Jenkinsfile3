@@ -72,7 +72,7 @@ pipeline {
                                  
                  sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
                  sh("helm repo update")
-                 sh("helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true")
+                 sh("kubectl get services nginx-ingress-nginx-ingress -n development || helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
               
                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
