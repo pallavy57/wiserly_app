@@ -2,11 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: wip-service-01
+  labels:
+    run: wip-service-01
   namespace: development
 spec:
   ports:
-  - port: 80
-    targetPort: 8000
+  - port: 8000
+    protocol: TCP
   type: LoadBalancer    
   selector:
     app: wip-service

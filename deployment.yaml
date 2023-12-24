@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wip-service-deployment
+  name: wip-service-01
   namespace: development
   labels:
-    app: wip-service
+    app: rest-api
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: wip-service
+      app: rest-api
   template:
     metadata:
       labels:
-        app: wip-service
+        app: rest-api
     spec:
       containers:
-        - name: wip-service
+        - name: api
           image: wipregistry.azurecr.io/wiserly-inventory-planner:latest  
           ports:
             - containerPort: 8000

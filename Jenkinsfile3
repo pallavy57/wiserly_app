@@ -70,14 +70,14 @@ pipeline {
                    // Create namespace if it doesn't exist
                    sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
                                  
-                 sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
-                 sh("helm repo update")
-                 sh("./kubectl get services nginx-ingress-nginx-ingress -n development || helm upgrade nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
-                 sh("./kubectl get pods -n development")
-                 sh("./kubectl get services -n development")
-                   sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
-                   sh("./kubectl --namespace=${namespace} apply -f service.yaml")
-                   sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
+                 //sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
+                 //sh("helm repo update")
+                 //sh("./kubectl get services nginx-ingress-nginx-ingress -n development || helm upgrade nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
+                // sh("./kubectl get pods -n development")
+                 //sh("./kubectl get services -n development")
+                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
+                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
+                   //sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
            //Grab the external Ip address of the service
                    sh("./kubectl get services --namespace=${namespace}")
                    sh './kubectl get pods -n development'
