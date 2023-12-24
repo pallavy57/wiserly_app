@@ -11,7 +11,7 @@ spec:
     protocol: TCP
   type: LoadBalancer    
   selector:
-    app: wip-service
+    app: rest-api
 
 
     # https://platform9.com/learn/v1.0/tutorials/nginix-controller-helm
