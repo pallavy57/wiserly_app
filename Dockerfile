@@ -88,6 +88,5 @@ ENV SQL_HOST="postgresql-155691-0.cloudclusters.net"
 ENV SQL_PORT=18598
 ENV DATABASE="wiserlydb_02"
 ENV FLASK_ENV="prod"
-ENTRYPOINT ["gunicorn"]
-CMD ["manage:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "manage:app"]
 # ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
