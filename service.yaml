@@ -7,7 +7,7 @@ metadata:
   namespace: development
 spec:
   ports:
-  - port: 8000
+  - port: 5000
     protocol: TCP
   type: LoadBalancer    
   selector:

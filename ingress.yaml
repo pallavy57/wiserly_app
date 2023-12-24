@@ -17,5 +17,5 @@ spec:
           service:
             name: wip-service-01
             port:
-              number: 80
+              number: 5000
               
