@@ -1,89 +1,89 @@
 pipeline {
-   environment {
+  environment {
     project = 'wip-01'
     appName = 'wiserly-inventory-planner'
     registeryName = 'wipregistry.azurecr.io'
     imageVersion = 'development'
     feSvcName = 'wip-service-deployment'
-    AZURE_SUBSCRIPTION_ID='35c42bfc-f8d8-48e8-ad03-4f9eb1379f05'
-    AZURE_TENANT_ID='412abcf4-3edc-4720-b50e-22484b38856b'
-    RESOURCE_GROUP='jenkins-vm'
-    namespace="development"
+    AZURE_SUBSCRIPTION_ID = '35c42bfc-f8d8-48e8-ad03-4f9eb1379f05'
+    AZURE_TENANT_ID = '412abcf4-3edc-4720-b50e-22484b38856b'
+    RESOURCE_GROUP = 'jenkins-vm'
+    namespace = "development"
   }
-    agent any
-    stages {
-        stage('Get latest version of code') {
-        steps{
+  agent any
+  stages {
+    stage('Get latest version of code') {
+      steps {
         checkout scm
-        }
-       }
-        stage('Build') {
-            steps {
-                sh("docker build -t ${registeryName}/${appName} .")
-                sh 'docker image ls'
-            }
-        }
-        stage('Push the Image') {
-          
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'ACR',passwordVariable: 'password', usernameVariable: 'username')]) {
-                            sh 'docker login -u ${username} -p ${password} wipregistry.azurecr.io'
-                            sh "docker image push ${registeryName}/${appName}"
-                }
-                
-            }
+      }
+    }
+    stage('Build') {
+      steps {
+        sh("docker build -t ${registeryName}/${appName} .")
+        sh 'docker image ls'
+      }
+    }
+    stage('Push the Image') {
+
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'ACR', passwordVariable: 'password', usernameVariable: 'username')]) {
+          sh 'docker login -u ${username} -p ${password} wipregistry.azurecr.io'
+          sh "docker image push ${registeryName}/${appName}"
         }
 
-        stage('Remove Unused docker image') {
-      steps{
+      }
+    }
+
+    stage('Remove Unused docker image') {
+      steps {
         sh "docker rmi ${registeryName}/${appName}:latest"
       }
     }
 
-     stage("install helm"){
-    steps{
-         sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
-         sh 'ls -a'
-         sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
-         sh 'sudo cp linux-amd64/helm /usr/bin'
-         sh 'helm version'
+    stage("install helm") {
+      steps {
+        sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
+        sh 'ls -a'
+        sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
+        sh 'sudo cp linux-amd64/helm /usr/bin'
+        sh 'helm version'
+      }
     }
-}
 
-        stage('List Pods') {
-           steps {
-               withKubeConfig([credentialsId: 'K83']) {
-                   sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
-                   sh 'chmod u+x ./kubectl'
-                   sh './kubectl get pods -n development'
-               }
-           }
+    stage('List Pods') {
+      steps {
+        withKubeConfig([credentialsId: 'K83']) {
+          sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+          sh 'chmod u+x ./kubectl'
+          sh './kubectl get pods -n development'
         }
-
-      
-         stage('Deploy Application') {
-          
-    steps{
-    
-              sh("az login --service-principal -u b60930fc-d48e-4034-b9f6-f30843e5bb60 -p  ~uC8Q~Fn.sBL4o963tArpBvr3IpIOGukffM71b~z --tenant 412abcf4-3edc-4720-b50e-22484b38856b")
-              sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
-                   // Create namespace if it doesn't exist
-                   sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
-                                 
-                 //sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
-                 //sh("helm repo update")
-                 //sh("./kubectl get services nginx-ingress-nginx-ingress -n development || helm upgrade nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
-                // sh("./kubectl get pods -n development")
-                 //sh("./kubectl get services -n development")
-                    sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
-                    sh("./kubectl --namespace=${namespace} apply -f service.yaml")
-                    sh("./kubectl --namespace=${namespace} apply -f cluster-issuer.yaml")
-                    sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
-           //Grab the external Ip address of the service
-                   sh("./kubectl get all --namespace=${namespace}")
-                  
-         
-    } 
-  }
+      }
     }
+
+    stage('Deploy Application') {
+
+      steps {
+
+        sh("az login --service-principal -u b60930fc-d48e-4034-b9f6-f30843e5bb60 -p  ~uC8Q~Fn.sBL4o963tArpBvr3IpIOGukffM71b~z --tenant 412abcf4-3edc-4720-b50e-22484b38856b")
+        sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
+        // Create namespace if it doesn't exist
+        sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
+
+        //sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
+        //sh("helm repo update")
+        //sh("./kubectl get services nginx-ingress-nginx-ingress -n development || helm upgrade nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
+        // sh("./kubectl get pods -n development")
+        //sh("./kubectl get services -n development")
+        sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
+        sh("./kubectl --namespace=${namespace} apply -f service.yaml")
+        sh("./kubectl --namespace=${namespace} apply -f cluster-issuer.yaml")
+        sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
+        //Grab the external Ip address of the service
+        sh("./kubectl get all --namespace=${namespace}")
+       
+
+      }
+    }
+
+  }
 }
