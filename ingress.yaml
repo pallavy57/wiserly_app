@@ -2,11 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
-  # annotations:
-  #   alb.ingress.kubernetes.io/scheme: internet-facing
-  #   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+  annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - wiserlyonline.in
+    secretName: tls-secret
   rules:
   - host: wiserlyonline.in
     http:
@@ -17,5 +20,5 @@ spec:
           service:
             name: wip-service-01
             port:
-              number: 5000
+              number: 80
               

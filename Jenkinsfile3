@@ -77,10 +77,10 @@ pipeline {
                  //sh("./kubectl get services -n development")
                     sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
                     sh("./kubectl --namespace=${namespace} apply -f service.yaml")
-                   //sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
+                    sh("./kubectl --namespace=${namespace} apply -f cluster-issuer.yaml")
+                    sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
            //Grab the external Ip address of the service
-                   sh("./kubectl get services --namespace=${namespace}")
-                   sh './kubectl get pods -n development'
+                   sh("./kubectl get all --namespace=${namespace}")
                   
          
     } 

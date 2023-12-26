@@ -7,11 +7,10 @@ metadata:
   namespace: development
 spec:
   ports:
-  - port: 5000
-    protocol: TCP
+  - port: 80
+    targetport: 5000
+    # protocol: TCP
   type: LoadBalancer    
   selector:
     app: rest-api
 
-
-    # https://platform9.com/learn/v1.0/tutorials/nginix-controller-helm

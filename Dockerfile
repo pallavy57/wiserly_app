@@ -70,7 +70,7 @@ RUN chown -R app:app $APP_HOME
 # change to the app user
 USER app
 EXPOSE 5000
-# run entrypoint.prod.sh
+
 
 ENV SHOPIFY_API_KEY="c5490bfc44800dc22a6c7e67385c93ef"
 ENV SHOPIFY_SHARED_SECRET="3b4c279c656b60557df965d0851cd368"
