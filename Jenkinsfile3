@@ -10,7 +10,7 @@ pipeline {
     RESOURCE_GROUP = 'jenkins-vm'
     namespace = "development"
     CI= true
-    password="myNwPassword90()"
+    password="12345678Qwer"
     username="admin"
     accesstoken=credentials("wip-artifactory")
     // PACKAGE_VERSION="1.0.0.${BUILD_NUMBER}"
