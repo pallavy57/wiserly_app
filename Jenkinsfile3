@@ -55,7 +55,7 @@ pipeline {
     stage("install helm") {
       steps {
         script{
- if (fileExists('helm-v3.6.1-linux-amd64.tar.gz')) {
+        if (fileExists('helm-v3.6.1-linux-amd64.tar.gz')) {
              echo 'File Exists'
         } else {
              echo 'No'
@@ -124,4 +124,10 @@ pipeline {
     
 
   } 
+
+  post { 
+        always { 
+            cleanWs()
+        }
+    }
 }
