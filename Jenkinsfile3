@@ -9,11 +9,11 @@ pipeline {
     AZURE_TENANT_ID = '412abcf4-3edc-4720-b50e-22484b38856b'
     RESOURCE_GROUP = 'jenkins-vm'
     namespace = "development"
+    CI= true
+    accesstoken=credentials("wip-artifactory")
   }
   agent any
-  options {
-  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '5', numToKeepStr: '')
-}
+
 
   stages {
     stage('Get latest version of code') {
@@ -27,6 +27,7 @@ pipeline {
         sh 'docker image ls'
       }
     }
+    
     stage('Push the Image') {
 
       steps {
@@ -64,6 +65,18 @@ pipeline {
       }
     }
 
+    stage("upload to artifactory-jfrog"){
+       agent {
+        docker {
+          image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0' 
+          reuseNode true
+        }
+      }
+      steps {
+        sh 'jfrog rt upload --url http://4.156.133.2:8082/artifactory --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/wip-0.0.1-SNAPSHOT.jar wip-artifactory/'
+      }
+    }
+
     stage('Deploy Application') {
 
       steps {
@@ -90,4 +103,11 @@ pipeline {
     }
 
   }
+
+
+      post {
+        always {
+            cleanWs()
+        }
+    }  
 }
