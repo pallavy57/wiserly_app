@@ -82,7 +82,7 @@ pipeline {
       steps {
         echo "${HOME}/jobs/${jobname}/build"
         sh "jfrog rt ping --url=http://4.156.133.2:8082/artifactory"
-        sh 'jfrog rt upload  "${HOME}/jobs/${jobname}/build/"  wip-artifactory/my-archive.zip  --archive zip --url=http://4.156.133.2:8082/artifactory '
+        sh "jfrog rt upload  ${HOME}/jobs/${jobname}/build/  wip-artifactory/my-archive.zip  --archive zip --url=http://4.156.133.2:8082/artifactory "
        
       }
     }
@@ -111,6 +111,8 @@ pipeline {
 
       }
     }
+
+    
 
   } 
 }
