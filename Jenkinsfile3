@@ -75,7 +75,7 @@ pipeline {
         }
       }
       steps {
-        sh 'jfrog rt upload --url=http://4.156.133.2:8082/artifactory "build/"  wip-artifactory/my-archive.zip  --archive zip'
+        sh 'jfrog rt upload --flat=false "build/"  wip-artifactory/my-archive.zip  --archive zip'
         //sh 'jfrog rt upload --url http://4.156.133.2:8082/artifactory --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/wip-0.0.1-SNAPSHOT.jar wip-artifactory/'
       }
     }
