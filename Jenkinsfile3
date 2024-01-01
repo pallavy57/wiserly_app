@@ -1,5 +1,6 @@
 pipeline {
   environment {
+    jobname="wip-job-backend"
     project = 'wip-01'
     appName = 'wiserly-inventory-planner'
     registeryName = 'wipregistry.azurecr.io'
@@ -78,9 +79,9 @@ pipeline {
       }
       
       steps {
-        echo "${WORKSPACE}"
+        echo "${HOME}/jobs/${jobname}/build"
         sh "jfrog rt ping --url=http://4.156.133.2:8082/artifactory"
-        sh 'jfrog rt upload  "${WORKSPACE}/build/"  wip-artifactory/my-archive.zip  --archive zip --url=http://4.156.133.2:8082/artifactory '
+        sh 'jfrog rt upload  "${HOME}/jobs/${jobname}/build/"  wip-artifactory/my-archive.zip  --archive zip --url=http://4.156.133.2:8082/artifactory '
        
       }
     }
