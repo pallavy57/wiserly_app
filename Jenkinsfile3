@@ -90,7 +90,7 @@ pipeline {
    steps{
      sh '''
     cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}
-    zip -r ${jobname}/${BUILD_NUMBER} ./*
+    zip zipFile: '${jobname}/${BUILD_NUMBER}.zip', archive: false
     '''
    }
 
