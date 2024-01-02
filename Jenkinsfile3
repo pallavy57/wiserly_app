@@ -85,18 +85,10 @@ pipeline {
     stage("Zip Artifacts") {
 
       steps {
-        sh ''
-        ' pwd '
-        ''
-        sh ''
-        ' ls -la '
-        ''
-        sh ''
-        ' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '
-        ''
-        sh ''
-        ' ls '
-        ''
+        sh ''' pwd '''
+        sh ''' ls -la '''
+        sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
+        sh ''' ls '''
         zip zipFile: '${jobname}/${BUILD_NUMBER}.zip', archive: false
         archiveArtifacts artifacts: '${jobname}/${BUILD_NUMBER}.zip', fingerprint: true,
       }
@@ -113,15 +105,13 @@ pipeline {
       steps {
         script {
           def server = Artifactory.server 'artifactory-server'
-          def uploadSpec = ""
-          "{
+          def uploadSpec = """{
           "files": [{
             "pattern": "*zip",
             "target": "wip-artifactory/"
           }]
         }
-        ""
-        "
+        """
 
         server.upload(uploadSpec)
         buildInfo = Artifactory.newBuildInfo()
