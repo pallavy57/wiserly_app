@@ -89,7 +89,10 @@ pipeline {
 
    steps{
      sh '''
-     zip zipFile: '${jobname}/${BUILD_NUMBER}.zip', archive: false, dir: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}'
+     archiveArtifacts artifacts: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}',
+                   allowEmptyArchive: true,
+                   fingerprint: true,
+                 
     '''
    }
 
