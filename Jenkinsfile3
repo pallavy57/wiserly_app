@@ -90,13 +90,12 @@ pipeline {
    steps{
     sh ''' pwd '''
     sh ''' ls -la '''
-    sh ''' cd /var/lib/jenkins/workspace/wip-job-backend '''
-    sh '''
-     archiveArtifacts artifacts: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}',
+    sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
+     archiveArtifacts artifacts: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}/*',
                    allowEmptyArchive: true,
                    fingerprint: true,
                    onlyIfSuccessful: true
-    '''
+    
    }
 
     }
