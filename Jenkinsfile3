@@ -83,6 +83,16 @@ pipeline {
         }
       }
     }
+
+    stage("Zip Artifacts"){
+       
+
+    sh '''
+    cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}
+    zip -r ${jobname}/${BUILD_NUMBER} ./*
+    '''
+
+    }
     stage("upload to artifactory-jfrog"){
        agent {
         docker {
@@ -96,9 +106,8 @@ pipeline {
            def server = Artifactory.server 'artifactory-server'
             def uploadSpec = """{
                     "files": [{
-                       "pattern": "builds/*",
+                       "pattern": "*zip",
                        "target": "wip-artifactory/"
-                       "archive": "zip",
                         "flat": "false"
                     }]
                  }"""
@@ -146,3 +155,6 @@ pipeline {
         }
     }
 }
+
+// https://jfrog.com/blog/use-file-specs-in-your-cicd-to-get-full-control-of-your-artifacts/
+// https://www.jenkins.io/doc/pipeline/examples/
