@@ -20,9 +20,7 @@ pipeline {
     // ZIP_SOURCE_DIR="${WORKSPACE/build}"
     // ZIP_OUTFILE="${WORKSPACE}/build/build.${PACKAGE_VERSION}.zip"
   }
-  tools {
-    jfrog 'jfrog-cli'
-  }
+ 
   agent any
 
 
