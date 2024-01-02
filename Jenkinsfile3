@@ -88,41 +88,43 @@ pipeline {
        
 
    steps{
+    sh ''' pwd '''
+    sh ''' ls -la '''
      sh '''
      archiveArtifacts artifacts: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}',
                    allowEmptyArchive: true,
                    fingerprint: true,
-                 
+                   onlyIfSuccessful: true
     '''
    }
 
     }
-    stage("upload to artifactory-jfrog"){
-       agent {
-        docker {
-          image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0' 
-          reuseNode true
-        }
-      }
+    // stage("upload to artifactory-jfrog"){
+    //    agent {
+    //     docker {
+    //       image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0' 
+    //       reuseNode true
+    //     }
+    //   }
       
-      steps {
-            script{
-           def server = Artifactory.server 'artifactory-server'
-            def uploadSpec = """{
-                    "files": [{
-                       "pattern": "*zip",
-                       "target": "wip-artifactory/"
-                        "flat": "false"
-                    }]
-                 }"""
+    //   steps {
+    //         script{
+    //        def server = Artifactory.server 'artifactory-server'
+    //         def uploadSpec = """{
+    //                 "files": [{
+    //                    "pattern": "*zip",
+    //                    "target": "wip-artifactory/"
+    //                     "flat": "false"
+    //                 }]
+    //              }"""
 
-                 server.upload(uploadSpec) 
-                 buildInfo = Artifactory.newBuildInfo()
-                 server.publishBuildInfo buildInfo
-       }
+    //              server.upload(uploadSpec) 
+    //              buildInfo = Artifactory.newBuildInfo()
+    //              server.publishBuildInfo buildInfo
+    //    }
        
-      }
-    }
+    //   }
+    // }
 
     // stage('Deploy Application') {
 
