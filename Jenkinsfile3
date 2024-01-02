@@ -30,59 +30,59 @@ pipeline {
         checkout scm
       }
     }
-    // stage('Build') {
-    //   steps {
-    //     sh("docker build -t ${registeryName}/${appName} .")
-    //     sh 'docker image ls'
-    //   }
-    // }
+    stage('Build') {
+      steps {
+        sh("docker build -t ${registeryName}/${appName} .")
+        sh 'docker image ls'
+      }
+    }
     
-    // stage('Push the Image') {
+    stage('Push the Image') {
 
-    //   steps {
-    //     withCredentials([usernamePassword(credentialsId: 'ACR', passwordVariable: 'password', usernameVariable: 'username')]) {
-    //       sh 'docker login -u ${username} -p ${password} wipregistry.azurecr.io'
-    //       sh "docker image push ${registeryName}/${appName}"
-    //     }
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'ACR', passwordVariable: 'password', usernameVariable: 'username')]) {
+          sh 'docker login -u ${username} -p ${password} wipregistry.azurecr.io'
+          sh "docker image push ${registeryName}/${appName}"
+        }
 
-    //   }
-    // }
+      }
+    }
 
-    // stage('Remove Unused docker image') {
-    //   steps {
-    //     sh "docker rmi ${registeryName}/${appName}:latest"
-    //     // sh 'sudo rm -rf wip-job-backend'
-    //   }
-    // }
+    stage('Remove Unused docker image') {
+      steps {
+        sh "docker rmi ${registeryName}/${appName}:latest"
+        // sh 'sudo rm -rf wip-job-backend'
+      }
+    }
 
-    // stage("install helm") {
-    //   steps {
-    //     script{
-    //     if (fileExists('helm-v3.6.1-linux-amd64.tar.gz')) {
-    //          echo 'File Exists'
-    //     } else {
-    //          echo 'No'
-    //          sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
-    //     }
-    //     }
+    stage("install helm") {
+      steps {
+        script{
+        if (fileExists('helm-v3.6.1-linux-amd64.tar.gz')) {
+             echo 'File Exists'
+        } else {
+             echo 'No'
+             sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
+        }
+        }
        
         
-    //     sh 'ls -a'
-    //     sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
-    //     sh 'sudo cp linux-amd64/helm /usr/bin'
-    //     sh 'helm version'
-    //   }
-    // }
+        sh 'ls -a'
+        sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
+        sh 'sudo cp linux-amd64/helm /usr/bin'
+        sh 'helm version'
+      }
+    }
 
-    // stage('List Pods') {
-    //   steps {
-    //     withKubeConfig([credentialsId: 'K83']) {
-    //       sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
-    //       sh 'chmod u+x ./kubectl'
-    //       sh './kubectl get pods -n development'
-    //     }
-    //   }
-    // }
+    stage('List Pods') {
+      steps {
+        withKubeConfig([credentialsId: 'K83']) {
+          sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+          sh 'chmod u+x ./kubectl'
+          sh './kubectl get pods -n development'
+        }
+      }
+    }
 
     stage("Zip Artifacts"){
        
@@ -91,6 +91,7 @@ pipeline {
     sh ''' pwd '''
     sh ''' ls -la '''
     sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
+    
      archiveArtifacts artifacts: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}/*',
                    allowEmptyArchive: true,
                    fingerprint: true,
@@ -99,32 +100,32 @@ pipeline {
    }
 
     }
-    // stage("upload to artifactory-jfrog"){
-    //    agent {
-    //     docker {
-    //       image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0' 
-    //       reuseNode true
-    //     }
-    //   }
+    stage("upload to artifactory-jfrog"){
+       agent {
+        docker {
+          image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0' 
+          reuseNode true
+        }
+      }
       
-    //   steps {
-    //         script{
-    //        def server = Artifactory.server 'artifactory-server'
-    //         def uploadSpec = """{
-    //                 "files": [{
-    //                    "pattern": "*zip",
-    //                    "target": "wip-artifactory/"
-    //                     "flat": "false"
-    //                 }]
-    //              }"""
+      steps {
+            script{
+           def server = Artifactory.server 'artifactory-server'
+            def uploadSpec = """{
+                    "files": [{
+                       "pattern": "*zip",
+                       "target": "wip-artifactory/"
+                        "flat": "false"
+                    }]
+                 }"""
 
-    //              server.upload(uploadSpec) 
-    //              buildInfo = Artifactory.newBuildInfo()
-    //              server.publishBuildInfo buildInfo
-    //    }
+                 server.upload(uploadSpec) 
+                 buildInfo = Artifactory.newBuildInfo()
+                 server.publishBuildInfo buildInfo
+       }
        
-    //   }
-    // }
+      }
+    }
 
     // stage('Deploy Application') {
 
