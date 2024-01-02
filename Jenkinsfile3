@@ -92,13 +92,21 @@ pipeline {
       }
       
       steps {
-        echo "${HOME}/jobs/${jobname}/builds"
-        sh "${HOME}/jobs/${jobname}"
-          sh "ll"
-         sh "jfrog rt ping --url=http://4.156.133.2:8082/artifactory"
-         
-          sh "jfrog rt upload  'builds/'  wip-artifactory/my-archive-${JFROG_CLI_BUILD_NUMBER}.zip  --archive zip --url=http://4.156.133.2:8082/artifactory "
-          sh "jfrog rt build-publish"
+            script{
+           def server = Artifactory.server 'artifactory-server'
+            def uploadSpec = """{
+                    "files": [{
+                       "pattern": "builds/*",
+                       "target": "wip-artifactory/"
+                       "archive": "zip",
+                        "flat": "false"
+                    }]
+                 }"""
+
+                 server.upload(uploadSpec) 
+                 buildInfo = Artifactory.newBuildInfo()
+                 server.publishBuildInfo buildInfo
+       }
        
       }
     }
