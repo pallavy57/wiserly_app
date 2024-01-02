@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    jobname="wip-job-backend"
+    jobname = "wip-job-backend"
     project = 'wip-01'
     appName = 'wiserly-inventory-planner'
     registeryName = 'wipregistry.azurecr.io'
@@ -10,19 +10,18 @@ pipeline {
     AZURE_TENANT_ID = '412abcf4-3edc-4720-b50e-22484b38856b'
     RESOURCE_GROUP = 'jenkins-vm'
     namespace = "development"
-    CI= true
-    password="12345678Qwer"
-    username="jenkins"
-    accesstoken=credentials("wip-artifactory")
+    CI = true
+    password = "12345678Qwer"
+    username = "jenkins"
+    accesstoken = credentials("wip-artifactory")
     JFROG_CLI_BUILD_NAME = "${env.JOB_NAME}"
     JFROG_CLI_BUILD_NUMBER = "${env.BUILD_NUMBER}"
     // PACKAGE_VERSION="1.0.0.${BUILD_NUMBER}"
     // ZIP_SOURCE_DIR="${WORKSPACE/build}"
     // ZIP_OUTFILE="${WORKSPACE}/build/build.${PACKAGE_VERSION}.zip"
   }
- 
-  agent any
 
+  agent any
 
   stages {
     stage('Get latest version of code') {
@@ -36,7 +35,7 @@ pipeline {
         sh 'docker image ls'
       }
     }
-    
+
     stage('Push the Image') {
 
       steps {
@@ -57,16 +56,15 @@ pipeline {
 
     stage("install helm") {
       steps {
-        script{
-        if (fileExists('helm-v3.6.1-linux-amd64.tar.gz')) {
-             echo 'File Exists'
-        } else {
-             echo 'No'
-             sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
+        script {
+          if (fileExists('helm-v3.6.1-linux-amd64.tar.gz')) {
+            echo 'File Exists'
+          } else {
+            echo 'No'
+            sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
+          }
         }
-        }
-       
-        
+
         sh 'ls -a'
         sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
         sh 'sudo cp linux-amd64/helm /usr/bin'
@@ -84,44 +82,54 @@ pipeline {
       }
     }
 
-    stage("Zip Artifacts"){
-    
-      steps{
-        sh ''' pwd '''
-        sh ''' ls -la '''
-        sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
-        sh ''' ls '''
+    stage("Zip Artifacts") {
+
+      steps {
+        sh ''
+        ' pwd '
+        ''
+        sh ''
+        ' ls -la '
+        ''
+        sh ''
+        ' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '
+        ''
+        sh ''
+        ' ls '
+        ''
         zip zipFile: '${jobname}/${BUILD_NUMBER}.zip', archive: false
         archiveArtifacts artifacts: '${jobname}/${BUILD_NUMBER}.zip', fingerprint: true,
       }
 
     }
-    stage("upload to artifactory-jfrog"){
-       agent {
+    stage("upload to artifactory-jfrog") {
+      agent {
         docker {
-          image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0' 
+          image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0'
           reuseNode true
         }
       }
-      
+
       steps {
-            script{
-           def server = Artifactory.server 'artifactory-server'
-            def uploadSpec = """{
-                    "files": [{
-                       "pattern": "*zip",
-                       "target": "wip-artifactory/"
-                    }]
-                 }"""
+        script {
+          def server = Artifactory.server 'artifactory-server'
+          def uploadSpec = ""
+          "{
+          "files": [{
+            "pattern": "*zip",
+            "target": "wip-artifactory/"
+          }]
+        }
+        ""
+        "
 
-                 server.upload(uploadSpec) 
-                 buildInfo = Artifactory.newBuildInfo()
-                 server.publishBuildInfo buildInfo
-       }
-       
+        server.upload(uploadSpec)
+        buildInfo = Artifactory.newBuildInfo()
+        server.publishBuildInfo buildInfo
       }
-    }
 
+    }
+ 
     // stage('Deploy Application') {
 
     //   steps {
@@ -142,19 +150,16 @@ pipeline {
     //     sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
     //     //Grab the external Ip address of the service
     //     sh("./kubectl get all --namespace=${namespace}")
-       
 
     //   }
     // }
+  }  
 
-    
 
-  } 
 
-  post { 
-        always { 
-            cleanWs()
-        }
+  post {
+    always {
+      cleanWs()
     }
+  }
 }
-
