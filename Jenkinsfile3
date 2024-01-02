@@ -91,12 +91,9 @@ pipeline {
     sh ''' pwd '''
     sh ''' ls -la '''
     sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
-    sh ''' ls -la '''
-     archiveArtifacts artifacts: '*',
-                   allowEmptyArchive: true,
-                   fingerprint: true,
-                   onlyIfSuccessful: true
-    
+    sh ''' ls '''
+    zip zipFile: '${jobname}/${BUILD_NUMBER}.zip', archive: false
+    archiveArtifacts artifacts: '${jobname}/${BUILD_NUMBER}.zip', fingerprint: true,
    }
 
     }
@@ -115,7 +112,6 @@ pipeline {
                     "files": [{
                        "pattern": "*zip",
                        "target": "wip-artifactory/"
-                        "flat": "false"
                     }]
                  }"""
 
