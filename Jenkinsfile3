@@ -91,8 +91,8 @@ pipeline {
     sh ''' pwd '''
     sh ''' ls -la '''
     sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
-    
-     archiveArtifacts artifacts: '$JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER}/*',
+    sh ''' ls -la '''
+     archiveArtifacts artifacts: '*',
                    allowEmptyArchive: true,
                    fingerprint: true,
                    onlyIfSuccessful: true
@@ -163,5 +163,3 @@ pipeline {
     }
 }
 
-// https://jfrog.com/blog/use-file-specs-in-your-cicd-to-get-full-control-of-your-artifacts/
-// https://www.jenkins.io/doc/pipeline/examples/
