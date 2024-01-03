@@ -106,7 +106,6 @@ pipeline {
           }]
         }
         """
-
         server.upload(uploadSpec)
         buildInfo = Artifactory.newBuildInfo()
         server.publishBuildInfo buildInfo
@@ -115,29 +114,29 @@ pipeline {
 
     }
  
-    // stage('Deploy Application') {
+    stage('Deploy Application') {
 
-    //   steps {
+      steps {
 
-    //     sh("az login --service-principal -u b60930fc-d48e-4034-b9f6-f30843e5bb60 -p  ~uC8Q~Fn.sBL4o963tArpBvr3IpIOGukffM71b~z --tenant 412abcf4-3edc-4720-b50e-22484b38856b")
-    //     sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
-    //     // Create namespace if it doesn't exist
-    //     sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
+        sh("az login --service-principal -u b60930fc-d48e-4034-b9f6-f30843e5bb60 -p  ~uC8Q~Fn.sBL4o963tArpBvr3IpIOGukffM71b~z --tenant 412abcf4-3edc-4720-b50e-22484b38856b")
+        sh("az aks get-credentials --resource-group jenkins-vm --name  wip-cluster")
+        // Create namespace if it doesn't exist
+        sh("./kubectl get namespace ${namespace} || ./kubectl apply -f namespace.yaml")
 
-    //     //sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
-    //     //sh("helm repo update")
-    //     //sh("./kubectl get services nginx-ingress-nginx-ingress -n development || helm upgrade nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
-    //     // sh("./kubectl get pods -n development")
-    //     //sh("./kubectl get services -n development")
-    //     sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
-    //     sh("./kubectl --namespace=${namespace} apply -f service.yaml")
-    //     sh("./kubectl --namespace=${namespace} apply -f cluster-issuer.yaml")
-    //     sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
-    //     //Grab the external Ip address of the service
-    //     sh("./kubectl get all --namespace=${namespace}")
+        //sh ("helm repo add nginx-stable https://helm.nginx.com/stable")
+        //sh("helm repo update")
+        //sh("./kubectl get services nginx-ingress-nginx-ingress -n development || helm upgrade nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true -n development")
+        // sh("./kubectl get pods -n development")
+        //sh("./kubectl get services -n development")
+        sh("./kubectl --namespace=${namespace} apply -f deployment.yaml")
+        sh("./kubectl --namespace=${namespace} apply -f service.yaml")
+        // sh("./kubectl --namespace=${namespace} apply -f cluster-issuer.yaml")
+        // sh("./kubectl --namespace=${namespace} apply -f ingress.yaml")
+        //Grab the external Ip address of the service
+        sh("./kubectl get all --namespace=${namespace}")
 
-    //   }
-    // }
+      }
+    }
   }  
 
 
@@ -148,11 +147,3 @@ pipeline {
     }
   }
 }
-
-        // sh ''' pwd '''
-        // sh ''' ls -la '''
-        // sh ''' mkdir builds '''
-        // sh ''' cp -R $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} builds '''
-        // sh ''' cd builds '''
-        // sh ''' pwd '''
-        // sh ''' ls -la '''
