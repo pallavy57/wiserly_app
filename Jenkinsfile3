@@ -84,7 +84,8 @@ pipeline {
       steps {
         sh ''' pwd '''
         sh ''' ls -la '''
-        sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
+        sh ''' cp -R $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} $JENKINS_HOME/workspace/wip-job-backend/builds '''
+        sh ''' cd builds '''
         sh ''' pwd '''
         sh ''' ls -la '''
         // zip zipFile: "${jobname}/${BUILD_NUMBER}.zip", archive: false
