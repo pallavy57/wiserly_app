@@ -84,7 +84,8 @@ pipeline {
       steps {
         sh ''' pwd '''
         sh ''' ls -la '''
-        sh ''' cp -R $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} $JENKINS_HOME/workspace/wip-job-backend/builds '''
+        sh ''' mkdir builds '''
+        sh ''' cp -R $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} builds '''
         sh ''' cd builds '''
         sh ''' pwd '''
         sh ''' ls -la '''
