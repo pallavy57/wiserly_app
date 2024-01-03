@@ -87,8 +87,8 @@ pipeline {
         sh ''' cd $JENKINS_HOME/jobs/wip-job-backend/builds/${BUILD_NUMBER} '''
         sh ''' pwd '''
         sh ''' ls -la '''
-        zip zipFile: "${jobname}/${BUILD_NUMBER}.zip", archive: false
-        archiveArtifacts artifacts: "${jobname}/${BUILD_NUMBER}.zip", fingerprint: true
+        // zip zipFile: "${jobname}/${BUILD_NUMBER}.zip", archive: false
+        // archiveArtifacts artifacts: "${jobname}/${BUILD_NUMBER}.zip", fingerprint: true
       }
 
     }
